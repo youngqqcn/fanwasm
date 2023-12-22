@@ -2,7 +2,7 @@ var fs = require("fs");
 
 var content = fs.readFileSync("./pkg/wasm.js", "utf-8");
 
-var encoder_js = fs.readFileSync("./asset/encoding_utf8.min.js", "utf-8");
+var encoder_js = fs.readFileSync("./script/encoding_utf8.min.js", "utf-8");
 
 // 加入 encoder
 content = encoder_js + '\n' + content;

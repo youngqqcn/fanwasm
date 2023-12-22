@@ -7,7 +7,7 @@ clean:
 .PHONY: build
 build: clean
 	wasm-pack build --target web
-	node replace.js
+	node ./script/replace.js
 	mv ./pkg/wasm_bg.wasm ./pkg/wasm.wasm
 
 

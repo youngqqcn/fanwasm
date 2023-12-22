@@ -26,19 +26,19 @@ fn bytes2hex(bz: &[u8]) -> String {
 }
 
 #[wasm_bindgen]
-pub fn genkey(data: String, timestamp: u64) -> String {
+pub fn signmsg(s: String, n: String) -> String {
     // 微信小程序
     // pub fn genkey(data: String) -> String { // web端
 
-    let input: String = data;
+    let input: String = s;
     let pre = input.clone() + "+";
 
     // 微信小程序里面不能用获取系统随机源，会报错，只能通过传入参数进行伪随机
     let mut seed: [u8; 32] = [0; 32];
-    let hash = Sha3_256::digest(format!("{:?}+{:?}", &pre, timestamp).as_bytes());
+    let hash = Sha3_256::digest(format!("{:?}+{:?}", &pre, n).as_bytes());
     seed.copy_from_slice(&hash);
+    // let mut rng = thread_rng();  // 仅限 web端
     let mut rng = StdRng::from_seed(seed); // 仅限微信小程序
-                                           // let mut rng = thread_rng();  // 仅限 web端
 
     for _i in 0..(1 << 30) {
         // 生成随机key
@@ -91,7 +91,8 @@ mod tests {
     fn it_works() {
         println!("sha256={:?}", bytes2hex(&Sha256::digest(b"hello")));
         println!("sha3_256={:?}", bytes2hex(&Sha3_256::digest(b"hello")));
-        let ret = crate::genkey(String::from("hello"), 1234);
+        let ret = crate::signmsg(String::from("hello"), "1234".to_string());
+        println!("sig = {:?}", ret);
         assert!(!ret.is_empty());
     }
 }
