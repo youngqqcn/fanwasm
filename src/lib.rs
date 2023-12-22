@@ -27,8 +27,9 @@ fn bytes2hex(bz: &[u8]) -> String {
 
 #[wasm_bindgen]
 pub fn signmsg(s: String, n: String) -> String {
-    // 微信小程序
-    // pub fn genkey(data: String) -> String { // web端
+// pub fn signmsg(s: String, n: String) -> String {
+// 微信小程序
+    // web端
 
     let input: String = s;
     let pre = input.clone() + "+";
@@ -37,8 +38,8 @@ pub fn signmsg(s: String, n: String) -> String {
     let mut seed: [u8; 32] = [0; 32];
     let hash = Sha3_256::digest(format!("{:?}+{:?}", &pre, n).as_bytes());
     seed.copy_from_slice(&hash);
-    // let mut rng = thread_rng();  // 仅限 web端
-    let mut rng = StdRng::from_seed(seed); // 仅限微信小程序
+    let mut rng = thread_rng(); // 仅限 web端
+                                // let mut rng = StdRng::from_seed(seed); // 仅限微信小程序
 
     for _i in 0..(1 << 30) {
         // 生成随机key
