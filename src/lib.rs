@@ -7,6 +7,7 @@ use rand::rngs::StdRng;
 use rand::{thread_rng, Rng, SeedableRng};
 use sha2::Sha256;
 use sha3::{Digest, Sha3_256};
+use std::time::Instant;
 // use base64;
 
 fn hmac_sha256(key: &str, message: &str) -> Vec<u8> {
@@ -27,19 +28,22 @@ fn bytes2hex(bz: &[u8]) -> String {
 
 #[wasm_bindgen]
 pub fn signmsg(s: String, n: String) -> String {
-// pub fn signmsg(s: String, n: String) -> String {
-// 微信小程序
-    // web端
-
     let input: String = s;
     let pre = input.clone() + "+";
 
+    //============= web端 ====================
+    // 不支持时间？ https://internals.rust-lang.org/t/is-std-instant-on-webassembly-possible/18913
+    // let start = Instant::now();
+    // let mut rng = thread_rng();
+    //======================================
+
+    //=================小程序端=====================
     // 微信小程序里面不能用获取系统随机源，会报错，只能通过传入参数进行伪随机
     let mut seed: [u8; 32] = [0; 32];
     let hash = Sha3_256::digest(format!("{:?}+{:?}", &pre, n).as_bytes());
     seed.copy_from_slice(&hash);
-    let mut rng = thread_rng(); // 仅限 web端
-                                // let mut rng = StdRng::from_seed(seed); // 仅限微信小程序
+    let mut rng = StdRng::from_seed(seed); // 仅限微信小程序
+    //======================================
 
     for _i in 0..(1 << 30) {
         // 生成随机key
@@ -75,6 +79,7 @@ pub fn signmsg(s: String, n: String) -> String {
 
             // base64编码
             let b64 = general_purpose::STANDARD_NO_PAD.encode(mix);
+
             return b64;
         }
     }
