@@ -1,13 +1,28 @@
 use js_sys::*;
 use wasm_bindgen::prelude::*;
 
+use base64::{engine::general_purpose, Engine as _};
+use hmac::{Hmac, Mac};
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use sha2::Sha256;
 use sha3::{Digest, Sha3_256};
+// use base64;
 
-pub fn add(a: i32, b: i32) -> i32 {
-    a + b
+fn hmac_sha256(key: &str, message: &str) -> Vec<u8> {
+    let key_bytes = key.as_bytes();
+    let message_bytes = message.as_bytes();
+
+    let mut hmac =
+        Hmac::<Sha256>::new_from_slice(key_bytes).expect("HMAC can take key of any size");
+    hmac.update(message_bytes);
+
+    let result = hmac.finalize().into_bytes();
+    result.into_iter().collect()
+}
+
+fn bytes2hex(bz: &[u8]) -> String {
+    bz.iter().map(|byte| format!("{:02x}", byte)).collect()
 }
 
 #[wasm_bindgen]
@@ -29,15 +44,26 @@ pub fn genkey(data: String, timestamp: u64) -> String {
         }
 
         let md5hash = md5::compute(rnd_hex.as_bytes());
-        let h: &[u8] = md5hash.as_ref();
-        let rnd_hex: String = h.iter().map(|byte| format!("{:02x}", byte)).collect();
+        let key_bz: &[u8] = md5hash.as_ref();
+        let key_hex: String = bytes2hex(key_bz);
 
-        let msg = pre.clone() + &rnd_hex;
+        let msg = pre.clone() + &key_hex;
         let bz = msg.as_bytes();
         let hash1 = Sha3_256::digest(bz);
         let hash2 = Sha256::digest(hash1);
         if hash2[0] == 0 && (hash2[1] < 5) {
-            return rnd_hex;
+            // 然后用key进行签名
+            let sig = hmac_sha256(&key_hex, &(input.clone().as_str()));
+
+            // 将签名 和 key拼接起来
+            let sig_hex: String = bytes2hex(&sig);
+            println!("sig_hex = {:?}", sig_hex);
+            println!("key_hex = {:?}", key_hex);
+
+            let mut mix = sig.clone();
+            mix.extend_from_slice(key_bz);
+            let b64 = general_purpose::STANDARD_NO_PAD.encode(mix);
+            return b64;
         }
     }
     String::from("timeout")

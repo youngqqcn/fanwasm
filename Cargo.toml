@@ -5,7 +5,9 @@ edition = "2021"
 authors = ["youngqqcn@gmail.com"]
 
 [dependencies]
+base64 = "0.21.5"
 getrandom = { version = "0.2", features = ["js"] }
+hmac = "0.12.1"
 js-sys = "0.3.61"
 md5 = "0.7.0"
 rand = "0.8.5"
