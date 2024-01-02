@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.fantopia.RequestSigner.bytesToHexString;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RequestSignerTest {
@@ -76,6 +77,9 @@ class RequestSignerTest {
 
             System.out.println("sha256="+ bytesToHexString( sha256.digest( "hello".getBytes())));
             System.out.println("sha3="+ bytesToHexString( sha3.digest( "hello".getBytes())));
+
+            assertEquals("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", bytesToHexString( sha256.digest( "hello".getBytes())));
+            assertEquals("3338be694f50c5f338814986cdf0686453a888b84f424d792af4b9202398f392", bytesToHexString( sha3.digest( "hello".getBytes())));
         }catch (Exception e) {
 
         }

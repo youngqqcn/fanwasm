@@ -95,8 +95,8 @@ mod tests {
 
     #[test]
     fn it_works() {
-        println!("sha256={:?}", bytes2hex(&Sha256::digest(b"hello")));
-        println!("sha3_256={:?}", bytes2hex(&Sha3_256::digest(b"hello")));
+        println!("sha256('hello')={:?}", bytes2hex(&Sha256::digest(b"hello")));
+        println!("sha3-256('hello')={:?}", bytes2hex(&Sha3_256::digest(b"hello")));
         let ret = crate::signmsg(String::from("hello"), "1234".to_string());
         println!("sig = {:?}", ret);
         assert!(!ret.is_empty());
