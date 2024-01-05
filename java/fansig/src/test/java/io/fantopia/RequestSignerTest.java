@@ -66,6 +66,8 @@ class RequestSignerTest {
         assertFalse(RequestSigner.verifySig(msg, "oiu6i5ursHxuqihQcRPzxFKPhYT/XSlkWzGpPkNNnZ5/ItlF6c4i1XOlUIj56ly"));
         assertFalse(RequestSigner.verifySig(msg, "Xoiu6i5ursHxuqihQcRPzxFKPhYT/XSlkWzGpPkNNnZ5/ItlF6c4i1XOlUIj56ly"));
         assertFalse(RequestSigner.verifySig("Hello", "coiu6i5ursHxuqihQcRPzxFKPhYT/XSlkWzGpPkNNnZ5/ItlF6c4i1XOlUIj56ly"));
+
+        assertFalse(RequestSigner.verifySig("cfturnstileresponse=1231231&eventid=344&nonce=Bnu1CVd8sbvfveH5&platform=H5&seatid=484962053981254&timestamp=1704438226632&token=eyJUeXBlIjoiSnd0IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJGQU5UT1BJQSIsImpzb25EYXRhIjoie1widXNlcklkXCI6XCI0MzA4MDAxMTEwOTk5NzNcIixcInR5cGVcIjoxLFwibG9naW5UeXBlXCI6XCJoNVwiLFwiYXJlYUNvZGVcIjpcIjg2XCIsXCJjcmVhdGVUaW1lXCI6MTcwNDQzNTY1NTQ1N30iLCJleHAiOjE3MDUwNDA0NTV9.p4gI5CAYX4jVmoDTnvnuNTyKs7WQ3qhHuxNGPXRWqMA&tokenverifyactionname=mailTransfer&touseremail=degen.lin@gmail.com", "cda8XTBUyEhQfkAB5uP8xoahqz+cgnnnJqc1SlKGE19Pbp3ZmRg66tuQ2Fs89cdU"));
     }
 
     @org.junit.jupiter.api.Test

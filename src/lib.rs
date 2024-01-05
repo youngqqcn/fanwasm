@@ -88,6 +88,7 @@ pub fn signmsg(s: String, n: String) -> String {
 
 #[cfg(test)]
 mod tests {
+    use base64::{engine::general_purpose, Engine};
     use sha2::Sha256;
     use sha3::{Digest, Sha3_256};
 
@@ -99,6 +100,8 @@ mod tests {
         println!("sha3-256('hello')={:?}", bytes2hex(&Sha3_256::digest(b"hello")));
         let ret = crate::signmsg(String::from("hello"), "1234".to_string());
         println!("sig = {:?}", ret);
+        let x = general_purpose::STANDARD_NO_PAD.decode("cda8XTBUyEhQfkAB5uP8xoahqz+cgnnnJqc1SlKGE19Pbp3ZmRg66tuQ2Fs89cdU").unwrap();
+        println!("x = {:?}", bytes2hex(&x));
         assert!(!ret.is_empty());
     }
 }
