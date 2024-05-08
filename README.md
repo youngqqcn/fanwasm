@@ -1,4 +1,4 @@
-# fantopia签名
+# wasm签名
 
 - 安装 `wasm-pack`:
   - rust环境: `cargo install wasm-pack`
